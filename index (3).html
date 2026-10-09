@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="te" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Telugu Bible – తెలుగు బైబిల్ | Search, read, reflect daily</title>
+<meta name="description" content="Telugu Bible app: search any word and see every verse, get a daily dhyanam with explanation and prayer, read in light, dark or sepia, with English toggle.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Telugu:wght@400;600;800&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--scale:1;--w:400;--serif:"Noto Serif Telugu",Georgia,serif;--sans:"Figtree",system-ui,sans-serif;
+--bg:#f4f7f5;--ink:#12261f;--muted:#4d6159;--card:#fff;--line:#d3ded8;--accent:#0f5c4d;--on-accent:#fff;--gold:#b87a00}
+:root[data-theme=dark]{--bg:#0d1512;--ink:#e8efe9;--muted:#9bb0a5;--card:#15211c;--line:#26382f;--accent:#5fd1b0;--on-accent:#0d1512;--gold:#e8b84a}
+:root[data-theme=sepia]{--bg:#e9dcc0;--ink:#3b2d1a;--muted:#6b573a;--card:#f1e7cf;--line:#cdb98f;--accent:#7a4a1e;--on-accent:#f7efdc;--gold:#8a5a00}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html{font-size:calc(100% * var(--scale));scroll-padding-top:5rem}
+body{margin:0;background:var(--bg);color:var(--ink);font:var(--w) 1rem/1.65 var(--sans);transition:background .25s,color .25s}
+body.bold{--w:600}
+h1,h2,h3{font-family:var(--serif);line-height:1.3;margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.wrap{max-width:68rem;margin:0 auto;padding:0 1.25rem}
+/* top bar */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:.75rem;padding:.6rem 0;flex-wrap:wrap}
+.brand{font-family:var(--serif);font-weight:800;font-size:1.15rem;text-decoration:none}
+.ctl{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.ctl button{font:500 .85rem var(--sans);min-width:2.25rem;height:2.25rem;padding:0 .6rem;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:.5rem;cursor:pointer}
+.ctl button[aria-pressed=true]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.sw{width:2.25rem;padding:0!important;position:relative}
+.sw i{position:absolute;inset:.5rem;border-radius:50%;border:1px solid #8886}
+.sw[data-t=light] i{background:#f4f7f5}.sw[data-t=dark] i{background:#0d1512}.sw[data-t=sepia] i{background:#d9c18f}
+.sep{width:1px;height:1.5rem;background:var(--line);margin:0 .25rem}
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr 1fr;gap:3rem;align-items:center;padding:4rem 0 3.5rem}
+.hero h1{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:800;letter-spacing:-.01em}
+.hero p.lead{font-size:1.15rem;color:var(--muted);max-width:32rem;margin:1.1rem 0 1.8rem}
+.cta{display:inline-flex;align-items:center;gap:.7rem;background:var(--accent);color:var(--on-accent);text-decoration:none;padding:.85rem 1.4rem;border-radius:.7rem;font-weight:700}
+.cta svg{width:1.4rem;height:1.4rem;fill:currentColor}
+.note{display:block;margin-top:.7rem;font-size:.85rem;color:var(--muted)}
+/* live search demo */
+.demo{background:var(--card);border:1px solid var(--line);border-radius:1rem;padding:1.25rem;box-shadow:0 1px 0 var(--line)}
+.demo label{font-size:.85rem;color:var(--muted);display:block;margin-bottom:.4rem}
+.demo input{width:100%;font:500 1.1rem var(--serif);padding:.7rem .9rem;border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:.6rem}
+.demo input:focus{border-color:var(--accent);outline:none}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap;margin:.7rem 0 1rem}
+.chips button{font:500 .9rem var(--serif);border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:2rem;padding:.2rem .8rem;cursor:pointer}
+.count{font-family:var(--serif);font-size:2.4rem;font-weight:800;color:var(--accent);line-height:1.1}
+.count small{font:500 .95rem var(--sans);color:var(--muted);margin-left:.4rem}
+.refs{list-style:none;margin:.8rem 0 0;padding:0}
+.refs li{display:flex;justify-content:space-between;gap:1rem;padding:.55rem 0;border-top:1px solid var(--line);font-family:var(--serif)}
+.refs span{font:400 .85rem var(--sans);color:var(--muted)}
+.empty{color:var(--muted);margin:.8rem 0 0}
+/* sections */
+section{padding:3.5rem 0;border-top:1px solid var(--line)}
+section h2{font-size:clamp(1.5rem,3vw,2.1rem);margin-bottom:.4rem}
+.sub{color:var(--muted);margin:0 0 2rem;max-width:36rem}
+.feat{display:grid;grid-template-columns:1fr 1fr;column-gap:3rem}
+.feat div{padding:1.2rem 0;border-top:1px solid var(--line)}
+.feat h3{font-size:1.15rem;margin-bottom:.3rem}
+.feat p{margin:0;color:var(--muted)}
+.daily{display:grid;grid-template-columns:1fr 1.2fr;gap:3rem;align-items:start}
+.dcard{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:.5rem 1rem 1rem .5rem;padding:1.4rem 1.5rem}
+.dcard .ref{font:700 .9rem var(--sans);color:var(--gold)}
+.dcard h3{font-size:1.1rem;margin:1rem 0 .2rem}
+.dcard p{margin:0;color:var(--muted)}
+/* phones */
+.phones{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap}
+.phone{width:13rem;aspect-ratio:9/19;border:6px solid var(--ink);border-radius:2rem;background:var(--card);display:flex;align-items:center;justify-content:center;text-align:center;padding:1rem;color:var(--muted);font-size:.85rem;overflow:hidden}
+.phone img{width:100%;height:100%;object-fit:cover}
+/* footer */
+footer{border-top:1px solid var(--line);padding:2rem 0 2.5rem;color:var(--muted);font-size:.9rem}
+footer .wrap{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+footer a{margin-right:1rem}
+@media(max-width:52rem){.hero,.daily,.feat{grid-template-columns:1fr}.hero{padding-top:2.5rem;gap:2rem}.daily{gap:1.5rem}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+ <div class="wrap bar">
+  <a class="brand" href="#top" data-te="తెలుగు బైబిల్" data-en="Telugu Bible">తెలుగు బైబిల్</a>
+  <div class="ctl" role="toolbar" aria-label="Page settings">
+   <button class="sw" data-t="light" aria-label="Light theme" aria-pressed="true"><i></i></button>
+   <button class="sw" data-t="dark" aria-label="Dark theme" aria-pressed="false"><i></i></button>
+   <button class="sw" data-t="sepia" aria-label="Sepia theme" aria-pressed="false"><i></i></button>
+   <span class="sep"></span>
+   <button id="dec" aria-label="Smaller text">A−</button>
+   <button id="inc" aria-label="Larger text">A+</button>
+   <button id="bold" aria-pressed="false" aria-label="Bold text"><b>B</b></button>
+   <span class="sep"></span>
+   <button id="lang" aria-label="Switch language">English</button>
+  </div>
+ </div>
+</header>
+
+<main id="top">
+<div class="wrap hero">
+ <div>
+  <h1 data-te="ప్రతి పదాన్ని వెతకండి. ప్రతిరోజూ చదవండి." data-en="Search every word. Read every day.">ప్రతి పదాన్ని వెతకండి. ప్రతిరోజూ చదవండి.</h1>
+  <p class="lead" data-te="ఒక పదం టైప్ చేస్తే బైబిల్‌లో అది ఎన్నిసార్లు ఉందో, ఏ వచనాల్లో ఉందో వెంటనే చూపిస్తుంది. రోజూ ఒక వచనం, వివరణ, ప్రార్థనతో." data-en="Type a word and see how many times it appears in the Bible and exactly where. Plus a verse, explanation and prayer every day.">ఒక పదం టైప్ చేస్తే బైబిల్‌లో అది ఎన్నిసార్లు ఉందో, ఏ వచనాల్లో ఉందో వెంటనే చూపిస్తుంది. రోజూ ఒక వచనం, వివరణ, ప్రార్థనతో.</p>
+  <!-- TODO: replace # with your Play Store link -->
+  <a class="cta" id="playlink" href="https://play.google.com/store/apps/details?id=com.utham.telugubible">
+   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.6 2.3c-.3.2-.5.6-.5 1.1v17.2c0 .5.2.9.5 1.1l9.6-9.7L3.6 2.3zm10.3 8.6 2.6-2.6L5.6 2.1l8.3 8.8zm0 2.2-8.3 8.8 10.9-6.2-2.6-2.6zm3.7-1.9 2.7 1.5c.8.5.8 1.2 0 1.700l-2.700 1.500-2.800-2.800 2.800-1.900z"/></svg>
+   <span data-te="Google Play లో పొందండి" data-en="Get it on Google Play">Google Play లో పొందండి</span>
+  </a>
+  <span class="note" data-te="ఉచితంగా డౌన్‌లోడ్ చేసుకోండి" data-en="Free to download">ఉచితంగా డౌన్‌లోడ్ చేసుకోండి</span>
+ </div>
+
+ <div class="demo" aria-live="polite">
+  <label for="q" data-te="పదం వెతకండి (ఇది నమూనా)" data-en="Search a word (sample preview)">పదం వెతకండి (ఇది నమూనా)</label>
+  <input id="q" type="search" value="ప్రేమ" autocomplete="off" lang="te">
+  <div class="chips" id="chips"></div>
+  <div id="out"></div>
+ </div>
+</div>
+
+<section id="features"><div class="wrap">
+ <h2 data-te="యాప్‌లో ఉన్నవి" data-en="What's in the app">యాప్‌లో ఉన్నవి</h2>
+ <p class="sub" data-te="చదవడానికి, వెతకడానికి, ధ్యానించడానికి కావలసినవన్నీ ఒకే చోట." data-en="Everything you need to read, search and reflect, in one place.">చదవడానికి, వెతకడానికి, ధ్యానించడానికి కావలసినవన్నీ ఒకే చోట.</p>
+ <div class="feat">
+  <div><h3 data-te="పద శోధన" data-en="Word search">పద శోధన</h3><p data-te="ఏ పదమైనా బైబిల్‌లో ఎన్నిసార్లు వచ్చిందో లెక్కతో, వచనాల జాబితాతో చూడండి." data-en="See how many times any word appears, with the full list of verses.">ఏ పదమైనా బైబిల్‌లో ఎన్నిసార్లు వచ్చిందో లెక్కతో, వచనాల జాబితాతో చూడండి.</p></div>
+  <div><h3 data-te="ప్రతిదిన ధ్యానం" data-en="Daily dhyanam">ప్రతిదిన ధ్యానం</h3><p data-te="ప్రతిరోజూ ఒక పాప్-అప్: వచనం, దాని వివరణ, చిన్న ప్రార్థన." data-en="A pop-up every day with a verse, its explanation and a short prayer.">ప్రతిరోజూ ఒక పాప్-అప్: వచనం, దాని వివరణ, చిన్న ప్రార్థన.</p></div>
+  <div><h3 data-te="లైట్, డార్క్, సెపియా" data-en="Light, dark and sepia">లైట్, డార్క్, సెపియా</h3><p data-te="పగలైనా రాత్రైనా కళ్లకు హాయిగా ఉండే మూడు రీడింగ్ మోడ్‌లు." data-en="Three reading modes that stay easy on the eyes, day or night.">పగలైనా రాత్రైనా కళ్లకు హాయిగా ఉండే మూడు రీడింగ్ మోడ్‌లు.</p></div>
+  <div><h3 data-te="అక్షర పరిమాణం, బోల్డ్" data-en="Text size and bold">అక్షర పరిమాణం, బోల్డ్</h3><p data-te="అక్షరాలను పెంచండి లేదా తగ్గించండి. స్పష్టత కోసం బోల్డ్ ఆన్ చేయండి." data-en="Make the text larger or smaller, and switch on bold for sharper clarity.">అక్షరాలను పెంచండి లేదా తగ్గించండి. స్పష్టత కోసం బోల్డ్ ఆన్ చేయండి.</p></div>
+  <div><h3 data-te="ఇంగ్లీష్ టోగుల్" data-en="English toggle">ఇంగ్లీష్ టోగుల్</h3><p data-te="అవసరమైనప్పుడు ఒక్క టాప్‌తో ఇంగ్లీష్‌కు మారండి." data-en="Switch to English with a single tap whenever you need it.">అవసరమైనప్పుడు ఒక్క టాప్‌తో ఇంగ్లీష్‌కు మారండి.</p></div>
+ </div>
+</div></section>
+
+<section id="daily"><div class="wrap daily">
+ <div>
+  <h2 data-te="ప్రతిరోజూ ఒక వచనం" data-en="One verse, every day">ప్రతిరోజూ ఒక వచనం</h2>
+  <p class="sub" data-te="ఉదయాన్నే ఫోన్‌లో వచ్చే చిన్న ధ్యానం మీ రోజును ప్రారంభిస్తుంది." data-en="A short reflection arrives on your phone each morning to start the day.">ఉదయాన్నే ఫోన్‌లో వచ్చే చిన్న ధ్యానం మీ రోజును ప్రారంభిస్తుంది.</p>
+ </div>
+ <div class="dcard">
+  <div class="ref" data-te="నమూనా: యోహాను 3:16" data-en="Sample: John 3:16">నమూనా: యోహాను 3:16</div>
+  <h3 data-te="వివరణ" data-en="Explanation">వివరణ</h3>
+  <p data-te="ఇక్కడ ఆ రోజు వచనానికి సరళమైన వివరణ కనిపిస్తుంది." data-en="A plain, simple explanation of the day's verse appears here.">ఇక్కడ ఆ రోజు వచనానికి సరళమైన వివరణ కనిపిస్తుంది.</p>
+  <h3 data-te="ప్రార్థన" data-en="Prayer">ప్రార్థన</h3>
+  <p data-te="ఆ వచనం ఆధారంగా ఒక చిన్న ప్రార్థన ఇక్కడ ఉంటుంది." data-en="A short prayer based on the verse follows.">ఆ వచనం ఆధారంగా ఒక చిన్న ప్రార్థన ఇక్కడ ఉంటుంది.</p>
+ </div>
+</div></section>
+
+<section id="screens"><div class="wrap">
+ <h2 data-te="యాప్ స్క్రీన్‌లు" data-en="App screens">యాప్ స్క్రీన్‌లు</h2>
+ <p class="sub" data-te="మీ స్క్రీన్‌షాట్‌లను images ఫోల్డర్‌లో ఉంచి ఇక్కడ జత చేయండి." data-en="Add your screenshots to an images folder and place them here.">మీ స్క్రీన్‌షాట్‌లను images ఫోల్డర్‌లో ఉంచి ఇక్కడ జత చేయండి.</p>
+ <div class="phones">
+  <!-- Replace each remaining placeholder with: <img src="images/NAME.jpeg" alt="..."> -->
+  <div class="phone"><img src="images/search.jpeg" alt="Telugu Bible search screen with suggested searches" loading="lazy"></div>
+  <div class="phone">Daily dhyanam</div>
+  <div class="phone">Dark mode</div>
+ </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+ <div>
+  <a href="privacy.html" data-te="గోప్యతా విధానం" data-en="Privacy policy">గోప్యతా విధానం</a>
+  <a href="mailto:you@example.com" data-te="సంప్రదించండి" data-en="Contact">సంప్రదించండి</a>
+ </div>
+ <div>© <span id="yr"></span> Telugu Bible</div>
+</div></footer>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const root=document.documentElement;
+let lang='te',scale=1;
+function store(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function load(k){try{return localStorage.getItem(k)}catch(e){return null}}
+
+/* language */
+function setLang(l){
+ lang=l;root.lang=l==='te'?'te':'en';
+ $$('[data-te]').forEach(e=>e.textContent=e.dataset[l]);
+ $('#lang').textContent=l==='te'?'English':'తెలుగు';
+ $('label[for=q]').textContent=$('label[for=q]').dataset[l];
+ store('lang',l);render();
+}
+$('#lang').onclick=()=>setLang(lang==='te'?'en':'te');
+
+/* theme, size, bold */
+function setTheme(t){
+ root.dataset.theme=t;
+ $$('.sw').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===t));
+ store('theme',t);
+}
+$$('.sw').forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
+function setScale(s){scale=Math.min(1.4,Math.max(.85,s));root.style.setProperty('--scale',scale);store('scale',scale)}
+$('#inc').onclick=()=>setScale(scale+.1);
+$('#dec').onclick=()=>setScale(scale-.1);
+$('#bold').onclick=e=>{
+ const on=document.body.classList.toggle('bold');
+ e.currentTarget.setAttribute('aria-pressed',on);store('bold',on?1:0);
+};
+
+/* sample search preview: counts below are illustrative only */
+const DATA={
+ 'ప్రేమ':{en:'love',n:'sample',refs:[['యోహాను 3:16','John 3:16'],['1 కొరింథీయులకు 13:4','1 Corinthians 13:4'],['1 యోహాను 4:8','1 John 4:8']],total:300},
+ 'కృప':{en:'grace',refs:[['ఎఫెసీయులకు 2:8','Ephesians 2:8'],['రోమీయులకు 3:24','Romans 3:24'],['తీతుకు 2:11','Titus 2:11']],total:150},
+ 'విశ్వాసం':{en:'faith',refs:[['హెబ్రీయులకు 11:1','Hebrews 11:1'],['రోమీయులకు 10:17','Romans 10:17'],['యాకోబు 2:17','James 2:17']],total:200}
+};
+function render(){
+ const q=$('#q').value.trim().toLowerCase();
+ const key=Object.keys(DATA).find(k=>k===q||DATA[k].en===q);
+ const i=lang==='te'?0:1;
+ $('#chips').innerHTML=Object.keys(DATA).map(k=>`<button type="button" data-k="${k}">${lang==='te'?k:DATA[k].en}</button>`).join('');
+ $$('#chips button').forEach(b=>b.onclick=()=>{$('#q').value=lang==='te'?b.dataset.k:DATA[b.dataset.k].en;render()});
+ if(!key){$('#out').innerHTML=`<p class="empty">${lang==='te'?'నమూనాలో ప్రేమ, కృప, విశ్వాసం ప్రయత్నించండి. యాప్‌లో ఏ పదమైనా వెతకవచ్చు.':'Try love, grace or faith here. The app searches any word.'}</p>`;return}
+ const d=DATA[key];
+ $('#out').innerHTML=`<div class="count">~${d.total}<small>${lang==='te'?'సార్లు (నమూనా సంఖ్య)':'times (sample number)'}</small></div>
+ <ul class="refs">${d.refs.map(r=>`<li>${r[i]}<span>${lang==='te'?'వచనం':'verse'}</span></li>`).join('')}</ul>`;
+}
+$('#q').addEventListener('input',render);
+
+/* init */
+$('#yr').textContent=new Date().getFullYear();
+if(load('theme'))setTheme(load('theme'));
+if(load('scale'))setScale(parseFloat(load('scale'))||1);
+if(load('bold')==='1'){document.body.classList.add('bold');$('#bold').setAttribute('aria-pressed',true)}
+setLang(load('lang')||'te');
+</script>
+</body>
+</html>
